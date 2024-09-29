@@ -1,27 +1,11 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const app = express();
-app.use(express.json());
-const PORT = process.env.PORT || 4000;
+// routes/auth.js
+const express = require('express');
+const router = express.Router();
+const User = require('../models/User');
+const jwt = require('jsonwebtoken');
+const asyncHandler = require('express-async-handler');
 
-mongoose.connect("mongodb://localhost:27017/salesCRM", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    console.log("Connected to MongoDB");
-  })
-  .catch((err) => {
-    console.log("Failed to connect to MongoDB", err);
-  });
-
-// Import Routes
-// const customerRoutes = require('./routes/customerRoutes');
-// app.use('/api/customers', customerRoutes);
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
+// Register
 router.post('/register', asyncHandler(async (req, res) => {
   const { name, email, password, role } = req.body;
   const userExists = await User.findOne({ email });
@@ -47,6 +31,7 @@ router.post('/register', asyncHandler(async (req, res) => {
   }
 }));
 
+// Login
 router.post('/login', asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
@@ -72,6 +57,4 @@ const generateToken = (id) => {
   });
 };
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+module.exports = router;
