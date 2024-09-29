@@ -10,7 +10,7 @@ const UserSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 // Password hashing middleware
-
+// lokendra rajputcl 
 
 // Password verification method
 UserSchema.methods.matchPassword = async function(enteredPassword) {
